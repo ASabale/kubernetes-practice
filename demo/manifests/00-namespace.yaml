@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kube-demo
+  labels:
+    purpose: learning
+---
+# Namespace scoping keeps demo resources isolated from anything else running
+# in your local cluster. Applying the namespace first ensures the other
+# manifests can reference it by name.

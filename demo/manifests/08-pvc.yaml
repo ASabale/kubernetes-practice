@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-data
+  namespace: kube-demo
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+# Docker Desktop, kind, and minikube all ship with a default StorageClass.
+# Because we omit storageClassName entirely, the cluster's default class will
+# provision backing storage for this claim automatically.
