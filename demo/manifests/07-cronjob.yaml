@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cache-warmup
+  namespace: kube-demo
+spec:
+  schedule: "*/5 * * * *"
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: warmup
+              image: curlimages/curl:8.8.0
+              args:
+                - /bin/sh
+                - -c
+                - |
+                  echo "Calling the web API to warm the cache";
+                  curl -fsS http://web-service:8080/ > /dev/null;
+                  echo "Finished cache warmup run"
+---
+# CronJobs schedule recurring tasks. This one executes every five minutes to
+# simulate seeding the cache by calling the service.

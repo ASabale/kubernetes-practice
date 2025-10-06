@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: data-migration
+  namespace: kube-demo
+spec:
+  ttlSecondsAfterFinished: 300
+  template:
+    metadata:
+      labels:
+        job: data-migration
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: migrate
+          image: bitnami/kubectl:1.30.3
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "Pretending to run a database migration";
+              echo "API key available to jobs: $API_KEY";
+              sleep 2;
+              echo "Done!"
+          env:
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: web-secret
+                  key: API_KEY
+---
+# The Job runs a one-off task to illustrate batch workloads. We use a short TTL
+# so Kubernetes garbage-collects the completed Pod after a few minutes.

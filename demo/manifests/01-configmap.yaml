@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-config
+  namespace: kube-demo
+data:
+  MESSAGE: "Welcome to the Kubernetes hands-on demo!"
+  REDIS_HOST: "redis-0.redis"
+  REDIS_PORT: "6379"
+---
+# ConfigMaps store non-sensitive configuration for our application. The
+# Deployment consumes these values as environment variables.
